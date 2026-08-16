@@ -1,7 +1,7 @@
-name: 🔥 LIVE VOICE FX - Build APK
+name: 🔥 LIVE VOICE FX - Build APK (بدون gradlew)
 
 on:
-  workflow_dispatch:  # فقط زر يدوي، لن يشتغل إلا بأمرك
+  workflow_dispatch:
 
 jobs:
   build:
@@ -18,18 +18,16 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: إنشاء مشروع Android كامل من الصفر
+      - name: إنشاء المشروع من الصفر
         run: |
-          # 1. هيكل المجلدات
           mkdir -p app/src/main/java/com/worm/livevoicefx
           mkdir -p app/src/main/res/values
           mkdir -p app/src/main/res/layout
-          mkdir -p gradle/wrapper
 
-          # 2. ملف settings.gradle
+          # settings.gradle
           echo "include ':app'" > settings.gradle
 
-          # 3. ملف build.gradle (المشروع)
+          # build.gradle (project)
           cat > build.gradle << 'EOF'
           buildscript {
               repositories { google(); mavenCentral() }
@@ -38,7 +36,7 @@ jobs:
           allprojects { repositories { google(); mavenCentral() } }
           EOF
 
-          # 4. ملف build.gradle (التطبيق) - مع كل الأذونات
+          # build.gradle (app)
           cat > app/build.gradle << 'EOF'
           plugins { id 'com.android.application' }
           android {
@@ -59,7 +57,7 @@ jobs:
           }
           EOF
 
-          # 5. ملف AndroidManifest.xml
+          # AndroidManifest.xml
           cat > app/src/main/AndroidManifest.xml << 'EOF'
           <?xml version="1.0" encoding="utf-8"?>
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
@@ -78,7 +76,7 @@ jobs:
           </manifest>
           EOF
 
-          # 6. ملف الواجهة الرئيسية (مع كل المقابض Bass, Treble, Compressor, Reverb)
+          # MainActivity.java (واجهة كاملة)
           cat > app/src/main/java/com/worm/livevoicefx/MainActivity.java << 'EOF'
           package com.worm.livevoicefx;
           import android.os.Bundle;
@@ -113,7 +111,7 @@ jobs:
           }
           EOF
 
-          # 7. ملف الخدمة الصوتية (AudioEffectService) - حقيقي يعالج الصوت
+          # AudioEffectService.java (معالج صوتي حقيقي)
           cat > app/src/main/java/com/worm/livevoicefx/AudioEffectService.java << 'EOF'
           package com.worm.livevoicefx;
           import android.app.Service;
@@ -161,7 +159,7 @@ jobs:
           }
           EOF
 
-          # 8. ملف التخطيط activity_main.xml (يحتوي كل الخيارات التي طلبتها)
+          # activity_main.xml (واجهة كاملة)
           cat > app/src/main/res/layout/activity_main.xml << 'EOF'
           <?xml version="1.0" encoding="utf-8"?>
           <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -185,20 +183,18 @@ jobs:
           </LinearLayout>
           EOF
 
-          # 9. ملف strings.xml
+          # strings.xml
           echo '<?xml version="1.0" encoding="utf-8"?><resources><string name="app_name">LiveVoiceFX</string></resources>' > app/src/main/res/values/strings.xml
 
-          # 10. إنشاء gradle-wrapper.properties (لن يحتاج لملف jar، سنستخدم gradle مباشرة من النظام)
-          mkdir -p gradle/wrapper
-          echo "distributionBase=GRADLE_USER_HOME\ndistributionPath=wrapper/dists\ndistributionUrl=https\://services.gradle.org/distributions/gradle-8.2-bin.zip\nzipStoreBase=GRADLE_USER_HOME\nzipStorePath=wrapper/dists" > gradle/wrapper/gradle-wrapper.properties
+      - name: بناء التطبيق باستخدام gradle مباشرة
+        run: |
+          # تثبيت gradle إذا لم يكن موجوداً
+          if ! command -v gradle &> /dev/null; then
+            sudo apt-get update && sudo apt-get install -y gradle
+          fi
+          gradle assembleDebug --no-daemon
 
-      - name: منح صلاحيات التنفيذ
-        run: chmod +x gradlew || true
-
-      - name: بناء التطبيق (بدون اختبارات)
-        run: ./gradlew assembleDebug --no-daemon || gradle assembleDebug --no-daemon
-
-      - name: رفع الـ APK السحري
+      - name: رفع الـ APK
         uses: actions/upload-artifact@v4
         with:
           name: LiveVoiceFX-APK-نهائي
