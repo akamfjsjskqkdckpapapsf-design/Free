@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="#0A0A0A"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🎙️ LIVE VOICE FX"
+        android:textSize="28sp"
+        android:textColor="#00FFCC"
+        android:textStyle="bold"
+        android:layout_marginBottom="30dp"/>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/toggleLive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="تشغيل الصوت المباشر"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:layout_marginBottom="30dp"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔊 قوة الصوت" android:textColor="#FFFFFF" android:layout_marginTop="10dp"/>
+    <SeekBar android:id="@+id/seekVolume" android:layout_width="match_parent" android:layout_height="wrap_content" android:max="100" android:progress="70"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🎵 Bass" android:textColor="#FFFFFF" android:layout_marginTop="15dp"/>
+    <SeekBar android:id="@+id/seekBass" android:layout_width="match_parent" android:layout_height="wrap_content" android:max="100" android:progress="50"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🎵 Treble" android:textColor="#FFFFFF" android:layout_marginTop="15dp"/>
+    <SeekBar android:id="@+id/seekTreble" android:layout_width="match_parent" android:layout_height="wrap_content" android:max="100" android:progress="50"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔧 Compressor" android:textColor="#FFFFFF" android:layout_marginTop="15dp"/>
+    <SeekBar android:id="@+id/seekCompressor" android:layout_width="match_parent" android:layout_height="wrap_content" android:max="100" android:progress="30"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🌊 Reverb" android:textColor="#FFFFFF" android:layout_marginTop="15dp"/>
+    <SeekBar android:id="@+id/seekReverb" android:layout_width="match_parent" android:layout_height="wrap_content" android:max="100" android:progress="20"/>
+
+    <Button
+        android:id="@+id/btnLoadTrack"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="30dp"
+        android:text="📂 تحميل مقطع صوتي للمكالمة"
+        android:textStyle="bold"
+        android:backgroundTint="#FF5500"/>
+</LinearLayout>
